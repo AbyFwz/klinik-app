@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: Raleway, system-ui, sans-serif;
+  }
+  h1 {
+    @apply text-3xl;
+    @apply font-bold;
+    @apply font-Raleway;
+  }
+  th {
+    @apply font-medium;
+  }
+  thead {
+    @apply text-base;
+  }
+}
