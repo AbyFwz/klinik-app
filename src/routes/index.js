@@ -8,13 +8,13 @@ import {
   AddDokter,
   JadwalOperasi,
   Kasir,
-  Invoice,
   ProsesInvoice,
   EditInvoice,
   Pembayaran,
   History,
   Deposit,
   ViewJenisTindakan,
+  Invoice,
 } from "../pages";
 
 export default function index() {
@@ -104,6 +104,16 @@ export default function index() {
           element={
             <MainLayout>
               <Pembayaran />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/invoices"
+          exact
+          element={
+            <MainLayout>
+              <Invoice />
             </MainLayout>
           }
         />

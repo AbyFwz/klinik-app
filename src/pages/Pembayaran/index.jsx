@@ -6,8 +6,10 @@ import TableMetodePembayaran from "../Kasir/TableMetodePembayaran";
 import KasirTable from "../Kasir/KasirTable";
 import { Transaksi } from "../../data/Transaksi";
 import { BsCashStack } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export default function Pembayaran() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="mb-5">
@@ -120,6 +122,7 @@ export default function Pembayaran() {
         text="Proses Invoice"
         bgColor="bg-blue-400"
         hoverColor="hover:bg-blue-500"
+        onClick={() => navigate('/invoice')}
       />
     </>
   );
