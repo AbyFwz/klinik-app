@@ -13,12 +13,10 @@ export default function AddDokter() {
   const navigate = useNavigate();
   let { dokter } = useSelector((state) => state.dokter);
 
-  const initialDokterState = {
-    id: null,
-    nama: "",
-    spesialis: "",
+  const initForm = {
+    id: null, nama: "", spesialis: ""
   };
-  const [tempNewData, setTempNewData] = useState(initialDokterState); // holds current input data
+  const [tempNewData, setTempNewData] = useState([initForm]); // holds current input data
   // const [newDokter, setNewDokter] = useState(initialDokterState); // holds new array to push to global state
   // const [newRow, setNewRow] = useState(initialDokterState);
 
@@ -43,9 +41,14 @@ export default function AddDokter() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // dispatch(addDokter([...dokter, tempNewData]));
-    const newDokter = await DokterService.addData(tempNewData);
-    console.log(tempNewData);
-    navigate("/view-dokter");
+    try{
+      tempNewData.map(async (val, idx) => {
+        await DokterService.addData(val);
+      });
+      navigate("/view-dokter");
+    } catch {
+      console.error("err");
+    }
   };
 
   return (
@@ -80,7 +83,7 @@ export default function AddDokter() {
           </thead>
 
           <tbody>
-            {Object.values(tempNewData).map((input, i) => (
+            {tempNewData.map((input, i) => (
               <tr
                 key={i}
                 className="pt-8 border-b-[1px] h-16 border-b-gray-300"

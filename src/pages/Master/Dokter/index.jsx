@@ -16,13 +16,18 @@ import { getAll, getDokter, deleteDokter } from "../../../redux/dokterSlice";
 export default function ViewDokter() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { dokter, loading } = useSelector((state) => state.dokter);
+  // const { dokter, loading } = useSelector((state) => state.dokter);
   // const {dokter, loading} = useSelector((state) => ({...state.dokter}));
 
+  const [dokter, setDokter] = useState();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    dispatch(getAll());
-    console.log(dokter)
-  }, []);
+    DokterService.getAll.then((data) => {
+      setDokter(data);
+      setLoading(true);
+    });
+  }, [loading]);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -40,7 +45,14 @@ export default function ViewDokter() {
   };
 
   const handleDelete = (i) => {
-    dispatch(deleteDokter(index));
+      DokterService.removeData(i).then((resp) => {
+        handleCloseDelete();
+        navigate(0);
+      }).catch((err) => {
+        console.warn(err);
+        handleCloseDelete();
+        navigate(0);
+      });
   };
 
   const cols = [
@@ -64,8 +76,9 @@ export default function ViewDokter() {
             bgColor="bg-red-400"
             hoverColor="hover:bg-red-500"
             onClick={() => {
+              console.log(row.row.values.id)
               setShowDeleteModal(true);
-              setIndex(dokter[row.row.index].id);
+              setIndex(row.row.values.id);
             }}
             icon={<BsFillTrashFill />}
           />
@@ -78,8 +91,6 @@ export default function ViewDokter() {
   
   const columns = useMemo(() => cols, []); // added cols
   const data = useMemo(() => dokter, [dokter]);
-
-  // const data = dokter;
 
   return (
     <>

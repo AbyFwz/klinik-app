@@ -2,10 +2,11 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:3001/dokter";
 
-const getAll = async () => {
-    const response = await axios.get(baseUrl);
-    return response.data;
-}
+const getAll = axios.get(baseUrl).then((res) => {
+    return res.data;
+}).catch((err) => {
+    return err;
+});
 
 const addData = async (data) => {
     const response = await axios.post(baseUrl, data);
@@ -19,7 +20,7 @@ const updateData = async (id, data) => {
 
 const removeData =  async (id) => {
     const response = await axios.delete(`${baseUrl}/${id}`);
-    return response.data;
+    return response;
 }
 
 export default {getAll, addData, updateData, removeData};

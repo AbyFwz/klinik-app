@@ -8,7 +8,6 @@ const baseUrl = "http://localhost:3001/dokter";
 
 export const getAll = createAsyncThunk("dokter/getAll", async () => {
   const response = await axios.get(baseUrl);
-
   return response.data;
 });
 
