@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addDokter, setDokter } from "../../../redux/dokterSlice";
 import FormInput from "../../../components/FormInput";
 import { ButtonMain, ButtonIcon } from "../../../components/Button";
 import { BsFillTrashFill } from "react-icons/bs";
-import { Input } from "postcss";
 import DokterService from "../../../services/DokterService";
 import { useNavigate } from "react-router-dom";
 
@@ -75,7 +73,6 @@ export default function AddDokter() {
         <table className="table-auto w-full mt-4">
           <thead className="px-6 py-3 text-left font-bold text-gray-900 bg-slate-50">
             <tr>
-              <th>#</th>
               <th>No</th>
               <th>Nama</th>
               <th>Spesialis</th>
@@ -89,13 +86,13 @@ export default function AddDokter() {
                 className="pt-8 border-b-[1px] h-16 border-b-gray-300"
               >
                 <td className="font-bold w-1/12 pr-4 text-gray-500">{i + 1}</td>
-                <td className="w-2/12">
+                {/* <td className="w-2/12">
                   <FormInput
                     placeholder="No. Rekam Medis"
                     name="id"
                     onChange={(e) => handleChange(i, e)}
                   />
-                </td>
+                </td> */}
                 <td className="w-3/12">
                   <FormInput
                     placeholder="Name Lengkap"

@@ -35,7 +35,7 @@ export default function AddJenisTindakan({ handleClose }) {
       <div className="flex-col bg-white py-12 px-16 rounded-xl">
         <div className="flex justify-between items-start rounded border-b dark:border-gray-600">
           <h3 className="text-xl font-Inter font-bold text-main-blue">
-            Update Jenis Tindakan
+            Add Jenis Tindakan
           </h3>
         </div>
         <div className="my-4 w-max">
