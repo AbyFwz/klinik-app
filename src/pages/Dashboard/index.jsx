@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import BarChartCard from "./BarChartCard";
 import PieChartCard from "./PieChartCard";
 import ToDoCard from "./ToDoCard";
-import Card from "../../components/Card";
-import CardsArea from "./CardsArea";
 import MainCalendar from "../../components/MainCalendar";
-import VerticalCards from "./VerticalCards";
 import OverviewArea from "./OverviewArea";
 
 export default function Dashboard() {

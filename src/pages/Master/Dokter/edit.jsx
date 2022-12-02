@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import { ButtonMain, ButtonOutline } from "../../../components/Button";
+import { useDispatch, useSelector } from "react-redux";
 import FormInput from "../../../components/FormInput";
-// import { setDokter } from "../../redux/dokterSlice";
+import { ButtonMain, ButtonOutline } from "../../../components/Button";
+import { 
+  setDokter,
+  setSelectedData
+} from "../../../redux/dokterSlice";
 import DokterService from "../../../services/DokterService";
-import { useDispatch } from "react-redux";
 
 // sample layout
 export default function EditDokter({
   handleClose,
-  columns,
-  selectedValue,
-  toUpdate,
+  // columns,
+  // selectedValue,
+  // toUpdate,
 }) {
-
   const dispatch = useDispatch();
+  const { selectedData, dokter } = useSelector(
+    (state) => state.dokter
+  );
 
-  const defaultValues = {
-    id: toUpdate.id,
-    nama: toUpdate.nama,
-    spesialis: toUpdate.spesialis,
-  };
-
-  const [values, setFormValues] = useState(defaultValues);
+  // const defaultValues = {
+  //   id: toUpdate.id,
+  //   nama: toUpdate.nama,
+  //   spesialis: toUpdate.spesialis,
+  // };
+  
+  // const [values, setFormValues] = useState(defaultValues);
 
   // const updateData = (id, values) => {
   //   DokterService.updateData(id, values).then((res) =>
@@ -29,19 +34,35 @@ export default function EditDokter({
   //     console.log(res);}
   //   );
   // };
+console.log(dokter);
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormValues({
+  //     ...values,
+  //     [name]: value,
+  //   });
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({
-      ...values,
-      [name]: value,
-    });
+    dispatch(setSelectedData({ ...selectedData, [name]: value }));
   };
 
   //TODO: add global value https://www.freecodecamp.org/news/how-to-perform-crud-operations-using-react/
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values);
+    console.log(selectedData.id);
+    DokterService.update(selectedData.id, selectedData).then((res) => {
+      console.log(res.data);
+      dispatch(
+        setDokter(
+          setDokter.map((dokter) =>
+          dokter.id !== selectedData.id ? dokter : res.data
+          )
+        )
+      );
+    });
+    handleClose();
     // updateData(values.id, values);
     // window.location.reload()
   };
@@ -55,7 +76,15 @@ export default function EditDokter({
           </h3>
         </div>
         <div className="my-4 w-max">
-          {columns.map(
+        {Object.keys(selectedData).map((selected) => (
+            <FormInput
+              text={selected}
+              name={selected}
+              value={selectedData[selected]}
+              onChange={handleChange}
+            />
+          ))}
+          {/* {columns.map(
             (column, i) =>
               i !== 3 && (
                 <FormInput
@@ -65,7 +94,7 @@ export default function EditDokter({
                   onChange={handleChange}
                 />
               )
-          )}
+          )} */}
         </div>
         <div className="flex flex-row">
           <ButtonOutline

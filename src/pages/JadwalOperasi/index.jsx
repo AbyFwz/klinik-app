@@ -161,7 +161,7 @@ export default function JadwalOperasi() {
         <ButtonMain
           text={`+ Add Jadwal`}
           bgColor="bg-blue-400"
-          onClick={() => navigate("/add-dokter")}
+          onClick={() => navigate("/add-jadwal")}
         />
         <div>
           <ExportToExcel excelData={data} fileName="Jadwal_Operasi" />

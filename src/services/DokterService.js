@@ -8,6 +8,10 @@ const getAll = axios.get(baseUrl).then((res) => {
     return err;
 });
 
+const get = (id) => {
+    return axios.get(`${baseUrl}/${id}`);
+  };
+
 const addData = async (data) => {
     const response = await axios.post(baseUrl, data);
     return response.data;
@@ -23,4 +27,4 @@ const removeData =  async (id) => {
     return response;
 }
 
-export default {getAll, addData, updateData, removeData};
+export default {getAll, get, addData, updateData, removeData};

@@ -29,6 +29,7 @@ export const deleteDokter = createAsyncThunk(
 
 const initialState = {
   dokter: [],
+  selectedData: {},
   loading: false,
   error: null,
   edit: false,
@@ -41,15 +42,18 @@ const dokterSlice = createSlice({
     setDokter: (state, action) => {
       state.dokter = action.payload;
     },
+    setSelectedData: (state, action) => {
+      state.selectedData = action.payload;
+    }
   },
-  extraReducers: (builder) => {
-    builder.addCase(getAll.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getAll.fulfilled, (state, action) => {
-      state.loading = true;
-      state.dokter = action.payload;
-    });
+  // extraReducers: (builder) => {
+    // builder.addCase(getAll.pending, (state) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(getAll.fulfilled, (state, action) => {
+    //   state.loading = true;
+    //   state.dokter = action.payload;
+    // });
     // [getAll.pending]: (state, action) => {
     //   state.loading = true;
     // },
@@ -83,7 +87,8 @@ const dokterSlice = createSlice({
     //   state.loading = false;
     //   state.error = action.payload;
     // },
-  },
+  // },
 });
-export const { setDokter } = dokterSlice.actions;
+console.log(dokterSlice);
+export const { setDokter, setSelectedData } = dokterSlice.actions;
 export default dokterSlice.reducer;

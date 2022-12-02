@@ -16,6 +16,7 @@ import {
   ViewJenisTindakan,
   Invoice,
 } from "../pages";
+import AddJadwal from "../pages/JadwalOperasi/AddJadwal";
 
 export default function index() {
   return (
@@ -144,6 +145,16 @@ export default function index() {
           element={
             <MainLayout>
               <ViewJenisTindakan />
+            </MainLayout>
+          }
+        />
+        {/* Tambahan */}
+        <Route
+          path="/add-jadwal"
+          exact
+          element={
+            <MainLayout>
+              <AddJadwal />
             </MainLayout>
           }
         />

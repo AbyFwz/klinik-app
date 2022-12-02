@@ -1,11 +1,6 @@
 {
   "dokter": [
     {
-      "id": 1,
-      "nama": "drg. Strange",
-      "spesialis": "Orthodontist"
-    },
-    {
       "id": 2,
       "nama": "drg. Baby",
       "spesialis": "Gigi Anak"
@@ -19,24 +14,29 @@
       "id": 11,
       "nama": "X-Ray",
       "spesialis": "Radiology"
+    },
+    {
+      "id": 12,
+      "nama": "admin",
+      "spesialis": "asd"
     }
   ],
   "ruangan": [
     {
       "id": 1,
-      "studio": "Studio 1"
+      "nama": "Studio 1"
     },
     {
       "id": 2,
-      "studio": "Studio 2"
+      "nama": "Studio 2"
     },
     {
       "id": 3,
-      "studio": "Studio 3"
+      "nama": "Studio 3"
     },
     {
       "id": 4,
-      "studio": "Studio X-Ray"
+      "nama": "Studio X-Ray"
     }
   ],
   "jenis_tindakan": [
@@ -62,11 +62,11 @@
     },
     {
       "id": 6,
-      "nama": "Prosthodontics"
+      "nama": "Prosthodonticxz"
     },
     {
       "id": 8,
-      "nama": "Dental X-Ray"
+      "nama": "Dental X-Rays"
     }
   ],
   "pasien": [

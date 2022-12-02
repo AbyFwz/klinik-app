@@ -82,6 +82,16 @@ export default function ViewDokter() {
             }}
             icon={<BsFillTrashFill />}
           />
+          <ButtonIcon
+            bgColor="bg-slate-400"
+            hoverColor="hover:bg-slate-500"
+            onClick={() => {
+              // console.log(row.row.values.id)
+              setShowUpdateModal(true);
+              setIndex(row.row.values.id);
+            }}
+            icon={<BsPencilFill />}
+          />
         </div>
       ),
       id: "action",

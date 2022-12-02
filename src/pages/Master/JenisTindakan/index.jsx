@@ -87,7 +87,7 @@ export default function ViewJenisTindakan() {
               hoverColor="hover:bg-red-500"
               onClick={() => {
                 setShowDeleteModal(true);
-                setSelectedIndex(row.row.index + 1);
+                setSelectedIndex(row.row.values.id);
               }}
               icon={<BsFillTrashFill />}
             />
@@ -96,8 +96,8 @@ export default function ViewJenisTindakan() {
               hoverColor="hover:bg-slate-500"
               onClick={() => {
                 setShowUpdateModal(true);
-                console.log(row.row.index);
-                getJenisTindakan(row.row.index);
+                console.log(row.row.values.id);
+                getJenisTindakan(row.row.values.id);
               }}
               icon={<BsPencilFill />}
             />
