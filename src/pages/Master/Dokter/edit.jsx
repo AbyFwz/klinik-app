@@ -51,7 +51,7 @@ export default function EditDokter({
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(selectedData.id);
-    DokterService.update(selectedData.id, selectedData).then((res) => {
+    DokterService.updateData(selectedData.id, selectedData).then((res) => {
       console.log(res.data);
       dispatch(
         setDokter(

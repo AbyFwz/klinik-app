@@ -2,11 +2,10 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:3001/dokter";
 
-const getAll = axios.get(baseUrl).then((res) => {
-    return res.data;
-}).catch((err) => {
-    return err;
-});
+const getAll = async () => {
+    const response = await axios.get(baseUrl);
+    return response.data;
+  };
 
 const get = (id) => {
     return axios.get(`${baseUrl}/${id}`);

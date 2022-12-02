@@ -11,21 +11,26 @@ import ExportToExcel from "../../../components/ExportToExcel";
 import DokterService from "../../../services/DokterService";
 import DeleteModal from "../../../components/DeleteModal";
 import TableContentLoader from "../../../components/TableContentLoader";
-import { getAll, getDokter, deleteDokter } from "../../../redux/dokterSlice";
+import {
+  getAll,
+  getDokter,
+  deleteDokter,
+  setDokter,
+  setSelectedData,
+} from "../../../redux/dokterSlice";
 
 export default function ViewDokter() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { dokter, loading } = useSelector((state) => state.dokter);
+  const { dokter, loading } = useSelector((state) => state.dokter);
   // const {dokter, loading} = useSelector((state) => ({...state.dokter}));
 
-  const [dokter, setDokter] = useState();
-  const [loading, setLoading] = useState(false);
+  // const [dokter, setDokter] = useState();
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    DokterService.getAll.then((data) => {
-      setDokter(data);
-      setLoading(true);
+    DokterService.getAll().then((res) => {
+      dispatch(setDokter(res))
     });
   }, [loading]);
 
@@ -45,14 +50,24 @@ export default function ViewDokter() {
   };
 
   const handleDelete = (i) => {
-      DokterService.removeData(i).then((resp) => {
+    DokterService.removeData(i)
+      .then((resp) => {
         handleCloseDelete();
         navigate(0);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.warn(err);
         handleCloseDelete();
         navigate(0);
       });
+  };
+
+  const getDokter = (id) => {
+    DokterService.get(id)
+      .then((res) => {
+        dispatch(setSelectedData(res.data));
+      })
+      .catch((e) => console.log(`Error: ${e}`));
   };
 
   const cols = [
@@ -76,7 +91,7 @@ export default function ViewDokter() {
             bgColor="bg-red-400"
             hoverColor="hover:bg-red-500"
             onClick={() => {
-              console.log(row.row.values.id)
+              console.log(row.row.values.id);
               setShowDeleteModal(true);
               setIndex(row.row.values.id);
             }}
@@ -89,6 +104,7 @@ export default function ViewDokter() {
               // console.log(row.row.values.id)
               setShowUpdateModal(true);
               setIndex(row.row.values.id);
+              getDokter(row.row.values.id);
             }}
             icon={<BsPencilFill />}
           />
@@ -98,7 +114,6 @@ export default function ViewDokter() {
     },
   ];
 
-  
   const columns = useMemo(() => cols, []); // added cols
   const data = useMemo(() => dokter, [dokter]);
 
@@ -120,11 +135,11 @@ export default function ViewDokter() {
           <ExportToExcel excelData={dokter} fileName="Daftar_Dokter" />
         </div>
       </div>
-      {!loading ? (
+      {/* {!loading ? (
         <TableContentLoader />
-      ) : (
+      ) : ( */}
         <Table columns={columns} data={data} />
-      )}
+      {/* )} */}
 
       {showUpdateModal && (
         <EditDokter
