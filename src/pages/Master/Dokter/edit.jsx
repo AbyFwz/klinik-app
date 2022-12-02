@@ -34,7 +34,6 @@ export default function EditDokter({
   //     console.log(res);}
   //   );
   // };
-console.log(dokter);
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
   //   setFormValues({

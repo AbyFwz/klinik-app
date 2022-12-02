@@ -1,23 +1,23 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useReactToPrint } from 'react-to-print';
 import { Transaksi } from '../../data/Transaksi';
+import InvoicePrint from './InvoicePrint';
 import KasirTable from './KasirTable';
 import TableMetodePembayaran from './TableMetodePembayaran';
 
 const Invoice = () => {
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: "Invoces"
+    content: () => componentRef.current
   })
 
-  useEffect(() => {
-    handlePrint();
-  }, [handlePrint]);
+  // useEffect(() => {
+  //   handlePrint();
+  // }, [handlePrint]);
 
   return (
     <>
-      <div ref={componentRef} className="grid grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-4 gap-4 p-4">
         <div className="bg-green-50 col-span-4 font-bold font-Inter text-center">
           Invoice Number
         </div>
@@ -119,11 +119,16 @@ const Invoice = () => {
           <TableMetodePembayaran />
         </div>
       </div>
-      {/* <div className="col-span-2 float-right">
+
+      <div className="col-span-2 float-right">
         <button className="bg-red-300 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300" onClick={handlePrint}>
           Cetak Nota
         </button>
-      </div> */}
+      </div>
+
+      <div style={{ display: 'none' }}>
+        <InvoicePrint ref={componentRef} />
+      </div>
     </>
   );
 }

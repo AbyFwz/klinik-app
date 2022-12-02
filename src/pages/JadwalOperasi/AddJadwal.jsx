@@ -1,33 +1,61 @@
-import moment from "moment/moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ButtonMain, ButtonIcon } from "../../components/Button";
 import FormInput from "../../components/FormInput";
 import FormSelect from "../../components/FormSelect";
-import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
+import { BsFillTrashFill } from "react-icons/bs";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import JadwalService from "../../services/JadwalService";
 
 const AddJadwal = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const initForm = {
-    namaL: null,
+    id: null,
+    nama: null,
     tindakan: null,
     dokter: null,
     ruangan: null,
+    date: state,
     start: null,
     end: null,
+    status: "Dijadwalkan"
   };
 
   // Data Needed
-  const now = new Date();
-  const [date, setDate] = useState(moment(now).format("YYYY/MM/DD"));
   const [tempData, setTempData] = useState([initForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
+    tempData.map(async (val) => {
+      await JadwalService.addData(val);
+    });
+    navigate('/jadwal');
   };
 
   const handleAddRow = () => {
     setTempData([...tempData, initForm]);
   };
+
+  const handleRemove = (i) => {
+    const dataRow = [...tempData];
+    dataRow.splice(i, 1);
+    setTempData(dataRow);
+  };
+
+  const handleChange = (i, e) => {
+    let copyTemp = [...tempData];
+    copyTemp[i][e.target.name] = e.target.value;
+    setTempData(copyTemp);
+  };
+
+  const handleChangeHeader = (e) => {
+    let copyTemp = [...tempData];
+    copyTemp.map((val) => {
+      return (
+        val[e.target.name] = e.target.value
+      )
+    })
+  }
 
   return (
     <div>
@@ -49,27 +77,33 @@ const AddJadwal = () => {
 
       {/* input table form */}
       <hr />
-      <form onSubmit={(e) => handleSubmit(e)}>
-      <div className="max-w-sm w-full lg:max-w-full overflow-hidden shadow-lg rounded-lg bg-indigo-200">
-        <div className="px-6 pt-4 pb-4">
-          <div className="grid grid-rows-2 grid-flow-col gap-2">
-            <div className="grid grid-cols-2 grid-flow-col gap-2">
-              <div>Ruangan : </div>
-              <div>Dokter : </div>
-            </div>
-            <div className="grid grid-cols-2 grid-flow-col gap-2">
-            {tempData.map((val, idx) => {
-              return (
-                <>
-                  <div><FormSelect data="ruangan" name={`ruangan_${idx}`} /></div>
-                  <div><FormSelect data="dokter" name={`dokter_${idx}`} /></div>
-                </>
-                );
-            })}
+      <form onSubmit={handleSubmit}>
+        <div className="max-w-sm w-full lg:max-w-full overflow-hidden shadow-lg rounded-lg bg-indigo-200">
+          <div className="px-6 pt-4 pb-4">
+            <div className="grid grid-rows-2 grid-flow-col gap-2">
+              <div className="grid grid-cols-2 grid-flow-col gap-2">
+                <div>Ruangan : </div>
+                <div>Dokter : </div>
+              </div>
+              <div className="grid grid-cols-2 grid-flow-col gap-2">
+                <div>
+                  <FormSelect
+                    data="ruangan"
+                    name={`ruangan`}
+                    onChange={(e) => handleChangeHeader(e)}
+                  />
+                </div>
+                <div>
+                  <FormSelect
+                    data="dokter"
+                    name={`dokter`}
+                    onChange={(e) => handleChangeHeader(e)}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
         {/* <FormInput
           name="tanggal"
           type="date"
@@ -100,27 +134,36 @@ const AddJadwal = () => {
                   {/* <td className="font-bold w-1/13 pr-4 text-gray-500"></td> */}
                   <td className="w-1/12">{idx + 1}</td>
                   <td className="w-2/12">
-                    <FormInput placeholder="Name Lengkap" name={`nama_${idx}`} />
+                    <FormInput
+                      placeholder="Name Lengkap"
+                      name={`nama`}
+                      onChange={(e) => handleChange(idx, e)}
+                    />
                   </td>
                   <td className="w-2/12">
-                    <FormSelect data="jenis_tindakan" name={`jenis_tindakan_${idx}`} />
+                    <FormSelect
+                      data="jenis_tindakan"
+                      name={`tindakan`}
+                      onChange={(e) => handleChange(idx, e)}
+                    />
                   </td>
                   <td className="w-2/12">
-                    <FormInput name={`nama_${idx}`} />
+                    <FormInput name={`nama`} onChange={(e) => handleChange(idx, e)} />
                   </td>
                   {/* <td className="w-2/12">
-                    <FormSelect data="dokter" name={`dokter_${idx}`} />
+                    <FormSelect data="dokter" name={`dokter`} />
                   </td>
                   <td className="w-2/12">
-                    <FormSelect data="ruangan" name={`ruangan_${idx}`} />
+                    <FormSelect data="ruangan" name={`ruangan`} />
                   </td> */}
                   <td className="w-2/12">
                     <tr>
                       <td className="w-1/3">
                         <FormInput
                           placeholder="Waktu Mulai Operasi"
-                          name={`start_${idx}`}
+                          name={`start`}
                           type="time"
+                          onChange={(e) => handleChange(idx, e)}
                         />
                       </td>
                       <td className="w-1/3">
@@ -129,30 +172,18 @@ const AddJadwal = () => {
                       <td className="w-1/3">
                         <FormInput
                           placeholder="Waktu Selesai Operasi"
-                          name={`end_${idx}`}
+                          name={`end`}
                           type="time"
+                          onChange={(e) => handleChange(idx, e)}
                         />
                       </td>
                     </tr>
                   </td>
                   <td className="w-2/12">
                     <ButtonIcon
-                      bgColor="bg-slate-400"
-                      hoverColor="hover:bg-slate-500"
-                      // onClick={() => {
-                      //   setShowUpdateModal(true);
-                      //   console.log(row.row.values.id);
-                      //   getJenisTindakan(row.row.values.id);
-                      // }}
-                      icon={<BsPencilFill />}
-                    />
-                    <ButtonIcon
                       bgColor="bg-red-400"
                       hoverColor="hover:bg-red-500"
-                      // onClick={() => {
-                      //   setShowDeleteModal(true);
-                      //   setSelectedIndex(row.row.values.id);
-                      // }}
+                      onClick={() => handleRemove(idx)}
                       icon={<BsFillTrashFill />}
                     />
                   </td>

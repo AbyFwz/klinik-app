@@ -1,43 +1,84 @@
 import React, { useState, useMemo, useEffect } from "react";
 // third-party
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
 import { FiRefreshCcw } from "react-icons/fi";
 // components, data, slices
 import Table from "../../components/Table";
-import {
-  ButtonIcon,
-  ButtonMain,
-  ButtonTextIcon,
-} from "../../components/Button";
+import { ButtonIcon, ButtonMain } from "../../components/Button";
 import ExportToExcel from "../../components/ExportToExcel";
 import DeleteModal from "../../components/DeleteModal";
 import JadwalService from "../../services/JadwalService";
-import SelectStatus from "../../components/SelectStatus";
-import SelectDate from "../../components/SelectDate";
 import MessageModal from "./MessageModal";
 import TableContentLoader from "../../components/TableContentLoader";
 import UbahStatus from "./UbahStatus";
+import moment from "moment";
+import FormInput from "../../components/FormInput";
+import DokterService from "../../services/DokterService";
+import JenisTindakanService from "../../services/JenisTindakanService";
+import RuanganService from "../../services/RuanganService";
 
 export default function JadwalOperasi() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [jadwal, setJadwal] = useState([]);
+
+  const [tempJadwal, setTempJadwal] = useState([]);
+  const [dokter, setDokter] = useState([]);
+  const [tindakan, setTindakan] = useState([]);
+  const [ruangan, setRuangan] = useState([]);
 
   useEffect(() => {
     JadwalService.getAll().then((res) => {
-      setJadwal(res);
-      setLoading(true);
+      res.map((val) => {
+        DokterService.get(val.dokter).then((res) => {
+          setDokter((dokter) => [...dokter, res.data.nama]);
+        });
+        JenisTindakanService.get(val.tindakan).then((res) => {
+          setTindakan((tindakan) => [...tindakan, res.data.nama]);
+        });
+        RuanganService.get(val.ruangan).then((res) => {
+          setRuangan((ruangan) => [...ruangan, res.data.nama]);
+        });
+
+        setTempJadwal([...tempJadwal, val]);
+      });
+      setIsMounted(true);
+      setJadwal([]);
     });
   }, []);
 
-  const [jadwal, setJadwal] = useState([]);
+  useEffect(() => {
+    tempJadwal.map((val, idx) => {
+      if (
+        dokter[idx] != undefined &&
+        tindakan[idx] != undefined &&
+        ruangan[idx] != undefined
+      ) {
+        let temp = {
+          id: val.id,
+          nama: val.nama,
+          tindakan: tindakan[idx],
+          dokter: dokter[idx],
+          ruangan: ruangan[idx],
+          jam: `${val.start}-${val.end}`,
+          status: val.status,
+        };
+        setJadwal([...jadwal, temp]);
+        setLoading(true);
+      }
+    });
+  }, [isMounted, dokter, tindakan, ruangan]);
+
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [showChangeStatus, setShowChangeStatus] = useState(false);
 
+  const [date, setDate] = useState(moment(new Date()).format("YYYY/MM/DD"));
   const [deleteIndex, setDeleteIndex] = useState(0);
 
   const handleCloseUpdate = () => {
@@ -56,7 +97,17 @@ export default function JadwalOperasi() {
     setShowChangeStatus(!showChangeStatus);
   };
 
-  const handleDelete = (i) => {};
+  const handleDelete = (i) => {
+    JadwalService.removeData(i)
+      .then((resp) => {
+        handleCloseDelete();
+        navigate(0);
+      })
+      .catch((err) => {
+        console.warn(err);
+        handleCloseDelete();
+      });
+  };
 
   const cols = [
     {
@@ -119,8 +170,9 @@ export default function JadwalOperasi() {
               bgColor="bg-red-400"
               hoverColor="hover:bg-red-500"
               onClick={() => {
+                console.log(row)
                 setShowDeleteModal(true);
-                showDeleteModal && setDeleteIndex(i);
+                setDeleteIndex(row.id);
               }}
               icon={<BsFillTrashFill />}
             />
@@ -148,20 +200,18 @@ export default function JadwalOperasi() {
   return (
     <>
       <div className="mb-12">
-        <h1>
-          Jadwal Operasi:
-        </h1>
+        <h1>Jadwal Operasi:</h1>
         <p>Jadwal Operasi Jumat, 20 November 2022</p>
       </div>
       <div className="flex flex-row">
         <div className="mr-2">
-          <SelectDate />
+          <FormInput name="date" type="date" onChange={(e) => setDate(e)} />
         </div>
 
         <ButtonMain
           text={`+ Add Jadwal`}
           bgColor="bg-blue-400"
-          onClick={() => navigate("/add-jadwal")}
+          onClick={() => navigate("/add-jadwal", { state: date })}
         />
         <div>
           <ExportToExcel excelData={data} fileName="Jadwal_Operasi" />
@@ -171,8 +221,6 @@ export default function JadwalOperasi() {
             text={`Salin Jadwal`}
             bgColor="bg-blue-400"
             onClick={() => {
-              console.log("Salin jadwal");
-              console.log(jadwal);
               setShowMessageModal(true);
             }}
           />

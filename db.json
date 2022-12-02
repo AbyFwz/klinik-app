@@ -19,6 +19,11 @@
       "id": 12,
       "nama": "admin",
       "spesialis": "asd"
+    },
+    {
+      "id": 13,
+      "nama": "asd",
+      "spesialis": "dsa"
     }
   ],
   "ruangan": [
@@ -66,7 +71,7 @@
     },
     {
       "id": 8,
-      "nama": "Dental X-Rays"
+      "nama": "Dental X-Rayszz"
     }
   ],
   "pasien": [
@@ -3284,52 +3289,15 @@
   ],
   "jadwal": [
     {
-      "31/10/2022": [
-        {
-          "nama": "Clare",
-          "tindakan": "Orthodontics",
-          "dokter": "",
-          "ruangan": "",
-          "jam_mulai": "",
-          "jam_selesai": ""
-        }
-      ]
-    },
-    {
-      "now": [
-        {
-          "nama": "Clare",
-          "tindakan": "Orthodontics",
-          "dokter": "dr.Strange",
-          "ruangan": "Studio 2",
-          "jam": "16:00 - 16:30",
-          "status": "Belum datang"
-        },
-        {
-          "nama": "Mola",
-          "tindakan": "Orthodontics",
-          "dokter": "dr.Strange",
-          "ruangan": "Studio 2",
-          "jam": "17:00 - 17:30",
-          "status": "Belum datang"
-        },
-        {
-          "nama": "Genie",
-          "tindakan": "Orthodontics",
-          "dokter": "dr.Strange",
-          "ruangan": "Studio 2",
-          "jam": "17:30 - 18:00",
-          "status": "Belum datang"
-        },
-        {
-          "nama": "Jessica",
-          "tindakan": "Pedodontics",
-          "dokter": ".Strange",
-          "ruangan": "Studio Pedo",
-          "jam": "15:00 - 15:30",
-          "status": "Sedang Berlangsung"
-        }
-      ]
+      "id": 1,
+      "nama": "dasdas",
+      "tindakan": "2",
+      "dokter": "3",
+      "ruangan": "3",
+      "date": "2022/12/03",
+      "start": "12:00",
+      "end": "13:00",
+      "status": "Dijadwalkan"
     }
   ],
   "kasir": [
